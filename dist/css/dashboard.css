@@ -1,0 +1,10 @@
+.layout-pf-alt.layout-pf-alt-fixed.layout-pf-alt-fixed-inner-scroll .container-pf-alt-nav-pf-vertical-alt {
+    background-color: #fff !important;
+    height: 100%;
+    overflow: auto;
+}
+
+#dashboard .row {
+    margin-left: -20px;
+    margin-right: -20px;
+}

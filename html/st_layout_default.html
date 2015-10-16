@@ -1,0 +1,152 @@
+<div class="row" id="topRow">
+    <div id="h1_title">
+        <span id="h1_title_span">My Messages <small id="h1_title_small">There are 21 new messages</small></span>
+    </div>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" id="listTable" >
+        <tr>
+            <td id="ml" width="260" >
+                <table cellpadding="0" cellspacing="0" border="0"   class="middle_list">
+                    <tr>
+                        <td class="firstChild">
+                           
+                                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="modal" data-target="#searchModal">
+                                    Search
+                                  </button>
+                
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="mid_list">
+                            <div class="mid_list">
+
+                                <a ui-sref="default.details({sampleId:sample.id})" class="list-group-item"  ng-repeat="sample in samples">
+                                    <span class="badge">New</span>
+                                    <i class="fa fa-comment fa-fw"></i>{{sample.name}}
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="refreshListContainer">
+                            <a ui-sref="default" onclick="selectFirstItem()"><span class="pull-right fa fa-refresh"></span></a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td id="mc">
+                <div class="detailsColumn">
+                    <div ui-view cg-busy="{promise:sample,message:'',delay:0,minDuration:300,templateUrl:'progress_template.html'}"></div>
+                </div>
+            </td>
+        </tr>
+    </table>  
+         
+</div>
+                <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            <span class="pficon pficon-close"></span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel">Search Messages</h4>
+                        </div>
+                          <form class="form-horizontal" role="form" action="#/default">
+                                <div class="modal-body">
+               
+                                    <div class="form-group">
+                                      <label for="inputEmail1" class="col-md-3 control-label">Message Type</label>
+                                      <div class="col-md-7">
+                                        <input type="text" class="form-control input-md" id="st_msg_type" placeholder="">
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputPassword1" class="col-md-3 control-label">Date Range</label>
+                                      <div class="col-md-7">
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <input type="text" class="input-md form-control" name="start" />
+                                            <span class="input-group-addon">to</span>
+                                            <input type="text" class="input-md form-control" name="end" />
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                  <button type="submit" class="btn btn-primary">Search</button>
+                                </div>
+                          </form>
+                      </div>
+                    </div>
+                  </div>
+<!-- /.row -->
+<script>
+
+
+        var enableResize = function(){ 
+            $("#listTable").colResizable({
+                liveDrag:true,
+                minWidth:260,
+                postbackSafe:true,
+                partialRefresh:true,
+                hoverCursor:"ew-resize",
+                dragCursor:"ew-resize",
+                gripInnerHtml:"<div class='grip'></div>", 
+
+            })
+        }
+        function setUI(){
+
+            topOffset = 55;
+            botOffset = 37
+
+            height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 1;
+            height = height - topOffset;
+            if (height < 1) height = 1;
+            if (height > topOffset) {
+                $("#listTable").css("min-height", (height-topOffset-botOffset) + "px");
+                $(".middle_list").css("min-height", (height-topOffset-botOffset) + "px");
+                $("#panelDetails, .detailsColumn").css("height", (height-topOffset-botOffset) + "px");
+                $(".mid_list").css("min-height", (height-topOffset-botOffset)-84 + "px");
+            }
+       
+
+            var url = window.location;
+            var element = $('ul.nav a').removeClass('active').filter(function() {
+                return this.href == url || url.href.indexOf(this.href) == 0;
+            }).addClass('active').parent().parent().addClass('in').parent();
+            if (element.is('li')) {
+                element.addClass('active');
+            }
+//
+           // enableResize();
+
+//
+        }
+        setUI();
+        $(window).bind("resize", function() {
+            setUI()
+         });
+        var selectFirstItem = function(){
+            setTimeout(function(){
+                $('.mid_list .list-group-item').bind('click',function(){
+                    $('.mid_list .list-group-item').removeClass('itemSelected');
+                    $(this).addClass('itemSelected');
+                })
+                // load first item
+                $('.mid_list .list-group-item:first-child').trigger('click')
+            },500)
+        }
+        $(function(){  
+            $('.input-daterange').datepicker({
+                orientation: "top auto",
+                todayHighlight: true,
+                toggleActive: true,
+                autoclose: true
+
+            });
+            selectFirstItem();
+        });
+
+</script>
